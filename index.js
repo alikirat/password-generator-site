@@ -1,31 +1,109 @@
-let suggestedP1 = document.getElementById("suggested-p-1");
-let suggestedP2 = document.getElementById("suggested-p-2");
-const characters = [
-    "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
-    "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z", 
-    "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "~","`","!","@","#","$","%","^","&","*","(",")","_","-","+","=","{","[","}","]",",","|",":",";","<",">",".","?",
-    "/"
-];
+const suggestedP1 = document.getElementById("suggested-p-1");
+const suggestedP2 = document.getElementById("suggested-p-2");
 
-let passwordLength = 15;
+const lengthInput = document.getElementById("length-input");
+const lengthValue = document.getElementById("length-value");
+const numbersToggle = document.getElementById("numbers-toggle");
+const symbolsToggle = document.getElementById("symbols-toggle");
 
-function getRandomCharacter() {
-    let randomIndex = Math.floor(Math.random() * characters.length);
-    return characters[randomIndex]; 
+const themeToggleBtn = document.getElementById("theme-toggle");
+const copyHint = document.getElementById("copy-hint");
+
+const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".split("");
+const numbers = "0123456789".split("");
+const symbols = "!@#$%^&*_-".split("");
+
+
+function getCharacterSet() {
+  let chars = [...letters];
+  if (numbersToggle.checked) chars = chars.concat(numbers);
+  if (symbolsToggle.checked) chars = chars.concat(symbols);
+  return chars;
 }
 
 function generateRandomPassword() {
-    let randomPassword = "";
-    for (let i = 0; i < passwordLength; i++) {
-        randomPassword += getRandomCharacter();  
-    }
-    return randomPassword;
+  let length = Number(lengthInput.value);
+  if (length < 4) length = 4;
+
+  const chars = getCharacterSet();
+  let password = "";
+
+  for (let i = 0; i < length; i++) {
+    password += chars[Math.floor(Math.random() * chars.length)];
+  }
+
+  return password;
 }
 
 function generateRandomPasswords() {
-    let generatedPasswordOne = generateRandomPassword(); 
-    let generatedPasswordTwo = generateRandomPassword(); 
-    
-    suggestedP1.textContent = generatedPasswordOne; 
-    suggestedP2.textContent = generatedPasswordTwo; 
+  suggestedP1.textContent = generateRandomPassword();
+  suggestedP2.textContent = generateRandomPassword();
+  copyHint.textContent = "Tip: click a password to copy.";
 }
+
+// Copy with Scrimba-safe fallback
+function selectText(el) {
+  const range = document.createRange();
+  range.selectNodeContents(el);
+  const selection = window.getSelection();
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
+
+async function copyToClipboard(text, el) {
+  try {
+    if (navigator.clipboard) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch {}
+
+  try {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.style.position = "fixed";
+    textarea.style.left = "-9999px";
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+    return true;
+  } catch {
+    selectText(el);
+    return false;
+  }
+}
+
+suggestedP1.addEventListener("click", async () => {
+  const ok = await copyToClipboard(suggestedP1.textContent, suggestedP1);
+  copyHint.textContent = ok
+    ? "Copied first password!"
+    : "Selected. Press Ctrl/Cmd + C to copy.";
+});
+
+suggestedP2.addEventListener("click", async () => {
+  const ok = await copyToClipboard(suggestedP2.textContent, suggestedP2);
+  copyHint.textContent = ok
+    ? "Copied second password!"
+    : "Selected. Press Ctrl/Cmd + C to copy.";
+});
+
+// Slider label update
+lengthInput.addEventListener("input", () => {
+  lengthValue.textContent = lengthInput.value;
+});
+
+// Theme toggle
+function setTheme(theme) {
+  document.body.classList.toggle("light", theme === "light");
+  localStorage.setItem("theme", theme);
+}
+
+themeToggleBtn.addEventListener("click", () => {
+  const isLight = document.body.classList.contains("light");
+  setTheme(isLight ? "dark" : "light");
+});
+
+// Init
+setTheme(localStorage.getItem("theme") || "dark");
+generateRandomPasswords();

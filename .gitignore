@@ -1,2 +1,9 @@
-
+# OS / editor noise
 .DS_Store
+Thumbs.db
+
+# VS Code settings
+.vscode/
+
+# Logs
+*.log

@@ -1,69 +1,220 @@
+:root {
+  --bg: #1F2937;
+  --text: whitesmoke;
+  --muted: #D5D4D8;
+  --line: #2F3E53;
+  --card: #273549;
+  --accent: #55F991;
+  --btn: #10B981;
+
+  /* Dark mode icon */
+  --icon: #FFFFFF;
+}
+
+body.light {
+  --bg: #F7F7FB;
+  --text: #111827;
+  --muted: #4B5563;
+  --line: #E5E7EB;
+  --card: #FFFFFF;
+  --accent: #10B981;
+  --btn: #10B981;
+
+  /* Light mode icon */
+  --icon: #000000;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-    margin: 0;
-    padding: 5%;
-    min-height: 100vh;
-    background: #1F2937; 
-    font-family: Inter, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  font-family: Inter, sans-serif;
+  padding: 24px; /* mobile-first padding */
 }
 
 .container {
-    max-width: 600px;
-    margin: 0 auto;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
 }
 
+/* Typography: mobile-first */
 h1 {
-    font-family: Karla, sans-serif;
-    font-size: 6vw; 
-    font-weight: 800;
-    text-align: left;
-    margin-bottom: 0;
+  font-family: Karla, sans-serif;
+  font-size: 44px;
+  line-height: 1.05;
+  font-weight: 800;
+  margin: 0;
+  color: var(--text);
 }
 
-.white {
-    color: whitesmoke;
-}
-.green {
-    color: #55F991;
-}
+.white { color: var(--text); }
+.green { color: var(--accent); }
 
 #title-p {
-    color: #D5D4D8;
-    margin-top: 10px;
-    font-size: 2vw; 
+  color: var(--muted);
+  margin: 12px 0 0;
+  font-size: 18px;
+  line-height: 1.35;
 }
 
+/* Theme toggle */
+#theme-toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+}
+
+#theme-toggle:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+body:not(.light) #theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.theme-icon {
+  fill: var(--icon);
+  transition: transform 0.25s ease;
+}
+
+#theme-toggle:hover .theme-icon {
+  transform: rotate(20deg);
+}
+
+/* Controls: stack on mobile */
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 18px;
+  align-items: flex-start;
+}
+
+.control {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.control.check input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--btn);
+}
+
+.length-control {
+  width: 100%;
+}
+
+#length-input {
+  width: 100%;
+  max-width: 260px;
+  accent-color: var(--btn);
+}
+
+#length-value {
+  background: var(--card);
+  border: 1px solid var(--line);
+  padding: 6px 10px;
+  border-radius: 8px;
+  color: var(--text);
+  min-width: 44px;
+  text-align: center;
+}
+
+/* Button: full-width on mobile */
 #generate-password-btn {
-    border: none; 
-    background: #10B981;
-    color: #FFFFFF;
-    border-radius: 6px;
-    width: 100%;
-    max-width: 200px;
-    height: 42px;
-    margin-top: 3em;
-    font-size: 1.2em;
+  margin-top: 16px;
+  background: var(--btn);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  height: 48px;
+  width: 100%;
+  max-width: 420px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
 }
 
+/* Divider */
 #line {
-    border: none; 
-    height: 1px; 
-    background-color: #2F3E53;
-    margin: 35px 0;
+  margin: 26px 0;
+  height: 1px;
+  background: var(--line);
+  border: none;
 }
 
+/* Password boxes: stack on mobile */
 #passwords {
-    display: flex;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#suggested-p-1,
+#suggested-p-2 {
+  width: 100%;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--accent);
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* Hint */
+#copy-hint {
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* Desktop/tablet enhancements */
+@media (min-width: 700px) {
+  body {
+    padding: 5%;
+  }
+
+  h1 {
+    font-size: 60px;
+  }
+
+  #title-p {
+    font-size: 20px;
+  }
+
+  .controls {
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  #generate-password-btn {
+    width: 220px;
+  }
+
+  #passwords {
+    flex-direction: row;
     gap: 5%;
-}
+  }
 
-#suggested-p-1, #suggested-p-2 {
-    flex: 1;
-    border: none; 
-    background-color: #273549;
-    border-radius: 6px;
+  #suggested-p-1,
+  #suggested-p-2 {
     height: 39px;
-    font-size: 1em;
-    color: #55F991;
-
+  }
 }
-
