@@ -1,6 +1,6 @@
 # Password Generator
 
-A small static site that generates random passwords in the browser — no
+A small static site that generates random passwords in the browser. No
 backend, no build step, no dependencies.
 
 ## Features
@@ -14,7 +14,7 @@ backend, no build step, no dependencies.
 ## Running it
 
 Just open `index.html` in a browser, or serve the folder with any static
-file server — there's nothing to install or build.
+file server. There's nothing to install or build.
 
 ## Stack
 
